@@ -1,3 +1,4 @@
+.import multi.s
 .globl read_matrix
 
 .text
@@ -74,7 +75,19 @@ read_matrix:
     sw t1, 0(s3)     # saves num rows
     sw t2, 0(s4)     # saves num cols
 
-    # mul s1, t1, t2   # s1 is number of elements
+    addi sp, sp, -12
+    sw a0, 0(sp)
+    sw a1, 4(sp)
+    sw ra, 8(sp)
+    mv a0, t1
+    mv a1, t2
+    jal multi
+    mv s1, a0
+    lw a0, 0(sp)
+    lw a1, 4(sp)
+    lw ra, 8(sp)
+    addi sp, sp, 12
+    #mul s1, t1, t2   # s1 is number of elements
     # FIXME: Replace 'mul' with your own implementation
 
     slli t3, s1, 2

@@ -1,3 +1,4 @@
+.import multi.s
 .globl write_matrix
 
 .text
@@ -61,7 +62,20 @@ write_matrix:
     li t0, 2
     bne a0, t0, fwrite_error
 
-    # mul s4, s2, s3   # s4 = total elements
+    addi sp, sp, -12
+    sw a0, 0(sp)
+    sw a1, 4(sp)
+    sw ra, 8(sp)
+    mv a0, s2
+    mv a1, s3
+    jal multi
+    mv s4, a0
+    lw a0, 0(sp)
+    lw a1, 4(sp)
+    lw ra, 8(sp)
+    addi sp, sp, 12
+
+    #mul s4, s2, s3   # s4 = total elements
     # FIXME: Replace 'mul' with your own implementation
 
     # write matrix data to file
